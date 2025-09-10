@@ -1,0 +1,47 @@
+name: Test with uv
+
+on:
+  push:
+    branches: [ main, copilot/fix-2 ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      run: pip install uv
+
+    - name: Install dependencies
+      run: uv sync
+
+    - name: Run smoke test
+      run: |
+        echo "Starting application in background..."
+        uv run python -m uvicorn src.app:app --host 0.0.0.0 --port 8000 &
+        SERVER_PID=$!
+        sleep 5
+        
+        echo "Testing root endpoint redirect..."
+        curl -s -L http://localhost:8000/ | grep -q "html" || exit 1
+        
+        echo "Testing activities endpoint..."
+        curl -s http://localhost:8000/activities | grep -q "Chess Club" || exit 1
+        
+        echo "Testing signup endpoint..."
+        curl -s -X POST "http://localhost:8000/activities/Chess%20Club/signup?email=test@example.com" | grep -q "Signed up" || exit 1
+        
+        echo "All tests passed!"
+        kill $SERVER_PID 2>/dev/null || true

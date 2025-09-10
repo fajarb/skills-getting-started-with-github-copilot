@@ -9,6 +9,28 @@ A super simple FastAPI application that allows students to view and sign up for 
 
 ## Getting Started
 
+### Using uv (recommended)
+
+1. Install uv:
+
+   ```
+   pip install uv
+   ```
+
+2. Install dependencies:
+
+   ```
+   uv sync
+   ```
+
+3. Run the application:
+
+   ```
+   uv run python -m uvicorn src.app:app --host 0.0.0.0 --port 8000
+   ```
+
+### Using pip (legacy)
+
 1. Install the dependencies:
 
    ```
@@ -18,7 +40,7 @@ A super simple FastAPI application that allows students to view and sign up for 
 2. Run the application:
 
    ```
-   python app.py
+   python -m uvicorn src.app:app --host 0.0.0.0 --port 8000
    ```
 
 3. Open your browser and go to:
