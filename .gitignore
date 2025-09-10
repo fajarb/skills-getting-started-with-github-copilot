@@ -1,5 +1,10 @@
 *.temp*
 
+# Python virtual environments
+.venv/
+venv/
+env/
+
 # Compiled source #
 ###################
 *.com

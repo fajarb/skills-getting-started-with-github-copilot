@@ -1,3 +1,8 @@
+# Mergington High School API - uv configuration
+#
+# This file manages dependencies using uv (https://docs.astral.sh/uv/).
+# A legacy requirements.txt is maintained for backward compatibility.
+
 [project]
 name = "mergington-high-school-api"
 version = "1.0.0"
